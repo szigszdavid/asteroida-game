@@ -70,7 +70,8 @@ function startGame()
     state.players = []
     asteroids = []
     state.starships = starships
-    state.gameState = gameState
+    state.gameState = "INGAME"
+    state.counter = 0
     if (!state.players.includes(ydoc.clientID)) {
         state.players.push(ydoc.clientID)
     }
@@ -139,7 +140,7 @@ function update(dt) {
         })*/
 
         if (isCollision(state.starships[state.players.indexOf(ydoc.clientID)], asteroid)) {
-            gameState = 'END'
+            state.gameState = 'END'
         }
         
     })
@@ -149,8 +150,9 @@ function update(dt) {
     const  before = asteroids.length
     asteroids = asteroids.filter(asteroid => asteroid.y < canvas.height)
     const after = asteroids.length
+    gameState = state.gameState
     if (gameState != 'END') {
-        counter += before - after
+        state.counter += before - after
     }
 }
 function draw()
@@ -175,11 +177,11 @@ function draw()
 
     context.fillStyle = 'white'
     context.font = '100px Courier New'
-    context.fillText(`Points: ${counter}`, 10, 30)
+    context.fillText(`Points: ${state.counter}`, 10, 30)
 
 
     //The End
-    if(gameState == 'END')
+    if(state.gameState == 'END')
     {
         context.fillStyle = 'white'
         context.font = '100px Courier New'
